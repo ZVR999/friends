@@ -4,9 +4,10 @@ app = Flask(__name__)
 mysql = MySQLConnector(app,'friendsdb')
 @app.route('/')
 def index():
-    friends = mysql.query_db("SELECT * FROM friends")
-    print friends
-    return render_template('index.html')
+    query = "SELECT * FROM friends"                           # define your query
+    friends = mysql.query_db(query)                           # run query with query_db()
+    return render_template('index.html', all_friends=friends) # pass data to our template
+
 
 @app.route('/friends', methods=['POST'])
 def create():
