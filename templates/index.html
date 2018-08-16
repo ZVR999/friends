@@ -21,11 +21,13 @@
     <label for="occupation">Occupation:<input type="text" name="occupation" id="occupation"></label>
     <input type="submit" value="Add">
   </form>
-  <a href="/update">Modify</a>
-  
-  <form action="/remove_friend/<friend_id>" method="POST">
-    <input type="submit" value="Remove">
-  </form>
+  <h2>Remove a Friend</h2>
+    <form action='/remove_friend/{{ friend_id }}' method='POST'>
+      <input type="submit" value="Remove">
+    </form>
+
+
+
 
 </body>
 </html>

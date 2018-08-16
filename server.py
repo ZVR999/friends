@@ -6,7 +6,15 @@ mysql = MySQLConnector(app,'friendsdb')
 def index():
     query = "SELECT * FROM friends"                           # define your query
     friends = mysql.query_db(query)                           # run query with query_db()
-    return render_template('index.html', all_friends=friends) # pass data to our template
+    query = "SELECT MAX( id ) FROM friends;'"
+    max = mysql.query_db(query)
+    remove = max[0]
+    print remove
+    completeRemove = ''
+    if remove.get(u'MAX( id )') != None:    
+        completeRemove = str(int(remove.get(u'MAX( id )')))
+   
+    return render_template('index.html', all_friends=friends, friend_id = completeRemove) # pass data to our template
 
 @app.route('/friends/<friend_id>')
 def show(friend_id):
@@ -54,11 +62,29 @@ def update(friend_id):
 def modify():
     return render_template('update.html')
 
+@app.route('/remove')
+def remove():
+    
+    return render_template('remove.html')
+
 @app.route('/remove_friend/<friend_id>', methods=['POST'])
 def delete(friend_id):
+    
     query = "DELETE FROM friends WHERE id = :id"
     data = {'id': friend_id}
     mysql.query_db(query, data)
+
+    query = 'SELECT MAX( id ) FROM friends;'
+    max = mysql.query_db(query)
+    truemax = max[0]
+    reset = truemax.get(u'MAX( id )')
+    if reset != None:   
+        query = 'ALTER TABLE friends AUTO_INCREMENT = '+str(int(reset))+';'
+        mysql.query_db(query)
+    else:
+        query = 'ALTER TABLE friends AUTO_INCREMENT = 1;'
+        mysql.query_db(query)
+    print reset
     return redirect('/')
 
 
