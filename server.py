@@ -3,10 +3,13 @@ from mysqlconnection import MySQLConnector
 app = Flask(__name__)
 mysql = MySQLConnector(app,'friendsdb')
 @app.route('/')
-defcopy index():
+def index():
+    friends = mysql.query_db("SELECT * FROM friends")
+    print friends
     return render_template('index.html')
+
 @app.route('/friends', methods=['POST'])
 def create():
     # add a friend to the database!
     return redirect('/')
-app.run(debug=Tr
+app.run(debug=True)
